@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        #weather-container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App by varun </h1>
+    <div>
+        <label for="city">Enter City:</label>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+    </div>
+
+    <div id="weather-container">
+    </div>
+
+    <script>
+        function getWeather() {
+            const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
+            const city = document.getElementById('city').value;
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayWeather(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    alert('Error fetching weather data. Please try again.');
+                });
+        }
+
+        function displayWeather(data) {
+            const weatherContainer = document.getElementById('weather-container');
+            weatherContainer.innerHTML = '';
+
+            const cityName = data.name;
+            const temperature = Math.round(data.main.temp - 273.15); // Convert temperature to Celsius
+
+            const weatherInfo = document.createElement('div');
+            weatherInfo.innerHTML = `
+                <h2>${cityName}</h2>
+                <p>Temperature: ${temperature}°C</p>
+                <p>Weather: ${data.weather[0].description}</p>
+            `;
+
+            weatherContainer.appendChild(weatherInfo);
+        }
+    </script>
+</body>
+</html>
+
